@@ -44,7 +44,31 @@ class ViewController: UIViewController {
     //Mark: Actions
     @IBAction func loadData(_ sender: Any) {
         print("load button pressed")
+        // This is the same as:  SELECT * FROM Person
+        let fetchRequest:NSFetchRequest<Person> = Person.fetchRequest()
+        
+        do {
+            // Send the "SELECT *" to the database
+            //  results = variable that stores any "rows" that come back from the db
+            // Note: The database will send back an array of User objects
+            // (this is why I explicilty cast results as [Person]
+            let results = try fetchRequest.execute() as [Person]
+            
+            // Loop through the database results and output each "row" to the screen
+            print("Number of items in database: \(results.count)")
+            
+            for x in results {
+                print("person age: \(x.age)")
+                print("person name: \(String(describing: x.name))")
+            }
+        }
+        catch let error{
+            print("Error when fetching from database \(error.localizedDescription)")
+        }
     }
+    
+    
+    
     @IBAction func addData(_ sender: Any) {
         print("add button pressed")
         //. Get Data from text field
@@ -59,6 +83,7 @@ class ViewController: UIViewController {
         //save person object to database
         do{
             try self.context.save()
+            print("save person to database");
         }
         catch
         {
