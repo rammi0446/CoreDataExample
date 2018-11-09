@@ -47,6 +47,24 @@ class ViewController: UIViewController {
     }
     @IBAction func addData(_ sender: Any) {
         print("add button pressed")
+        //. Get Data from text field
+        let x = txtData.text!
+        
+        // create a " person" object
+        var p = Person(context: self.context)
+        // set the properties of the person object
+        
+        p.age = 40
+        p.name = x
+        //save person object to database
+        do{
+            try self.context.save()
+        }
+        catch
+        {
+            print("error while saving data")
+        }
+        //done
     }
     
 
