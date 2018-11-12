@@ -10,6 +10,7 @@ import UIKit
 import CoreData     //import core data library
 class ViewController: UIViewController {
     
+    @IBOutlet weak var txtSearch: UITextField!
     
     // 2. Add mandatory core data variables
     var context:NSManagedObjectContext!
@@ -52,7 +53,7 @@ class ViewController: UIViewController {
             //  results = variable that stores any "rows" that come back from the db
             // Note: The database will send back an array of User objects
             // (this is why I explicilty cast results as [Person]
-            let results = try fetchRequest.execute() as [Person]
+            let results = try self.context.fetch(fetchRequest) as [Person]
             
             // Loop through the database results and output each "row" to the screen
             print("Number of items in database: \(results.count)")
@@ -90,6 +91,36 @@ class ViewController: UIViewController {
             print("error while saving data")
         }
         //done
+    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
+        print("hello !!!!!");
+      // let screen2 = segue.destination as! SeacrhViewController
+      // screen2.name = self.txtSearch.text!
+        let editScreen = segue.destination as! EditViewController
+        
+        //SELECT * FROM User WHERE email = .....
+        let fetchRequest:NSFetchRequest<Person> = Person.fetchRequest()
+        fetchRequest.predicate =  NSPredicate(format: "name == %@", "qqqqqq")
+        
+        do {
+            
+            let results = try self.context.fetch(fetchRequest) as [Person]
+            
+            // Loop through the database results and output each "row" to the screen
+            print("Number of items in database: \(results.count)")
+            
+            if (results.count == 1) {
+                editScreen.person = results[0] as Person
+            }
+            
+        }
+        catch {
+            print("Error when fetching from database")
+        }
+        
+        
     }
     
 
