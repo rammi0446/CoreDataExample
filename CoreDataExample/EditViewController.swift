@@ -13,9 +13,30 @@ class EditViewController: UIViewController {
 
     // PLACEHOLDER HOLDER
     var person:Person!
-    
     @IBOutlet weak var txtEditName: UITextField!
     @IBOutlet weak var txtEditAge: UITextField!
+    
+    @IBAction func btnSave(_ sender: Any) {
+        
+        
+        print("DEBUG: Save button pressed!")
+        
+        // SQL: UPDATE USER (username,password) VALUES ("abc@gmail.com", 1234)
+        person.name = txtEditName.text!
+        var age = String(txtEditAge.text!)
+       // person.age = age
+        
+        // sending the SAVE to the databse
+        do {
+            try self.context.save()
+            print("Saved to database!")
+        }
+        catch {
+            print("Error while saving to database")
+        }
+        
+    }
+   
     
     var context:NSManagedObjectContext!
     
